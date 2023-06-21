@@ -10,8 +10,9 @@ const Home = () => {
   const [list, setList]=useState([]);
   const newItem=(task)=>{
     return{
+      label:task,
       done:false,
-      label:task
+      
     }
   }
 console.log(newItem);
@@ -19,8 +20,8 @@ console.log(newItem);
 const handleSubmit =(e)=>{
   e.preventDefault();
   const item =newItem(task);
-
-  console.log(item);
+setList([item,...list])
+  
 }
 const handleDelete =(e)=>{
 
@@ -60,6 +61,7 @@ const listItems=list.map((item,index)=>{
 		  value={task}
 		  onChange={(e)=> setTask(e.target.value)}
           />
+          
         </form>
         <form>
           

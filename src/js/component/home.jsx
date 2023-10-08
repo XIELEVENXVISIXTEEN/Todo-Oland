@@ -12,6 +12,7 @@ const Home = () => {
     return{
       label:task,
       done:false,
+    
       
     }
   }
@@ -21,11 +22,25 @@ const handleSubmit =(e)=>{
   e.preventDefault();
   const item =newItem(task);
 setList([item,...list])
-  
-}
-const handleDelete =(e)=>{
 
-}
+
+  
+
+};
+const handleKeyDown = (e) => {
+  if (e.key === 'Enter') {
+    if (inputValue.trim() !== '') {
+      setTask([...list, inputValue.trim()]);
+      setInputValue('');
+    }
+  }
+};
+const handleDeleteTask = (index) => {
+  const updatedTasks = [...list];
+  const filteredTasks= updatedTasks.filter((item,idx)=> idx!==index);
+  setList(filteredTasks);
+};
+
 
 useEffect(()=> {
   fetch('https://assets.breatheco.de/apis/fake/todos/user/carlostbanks')
@@ -37,22 +52,13 @@ useEffect(()=> {
     console.log(data);
   })
 },[])
-const listItems=list.map((item,index)=>{
-  return(
-  <li key={index}
-  >{item.label}</li>)
-})
+
+   
 	return (
     <div className="container"> 
-      <div className="todoList">  
-       {/* <div className="home">
-       {task && <TaskList task={task} title="All Tasks!" handleDelete={handleDelete} />}
-       </div> */}
+      <div className="todoList"> 
 
-
-
-  
-        <h1>todos</h1>
+         <h1>todos</h1>
         <form onSubmit={handleSubmit}>
 
           <input type="text"
@@ -63,17 +69,25 @@ const listItems=list.map((item,index)=>{
           />
           
         </form>
-        <form>
-          
-          
-          <ul type="li"
-             placeholder="No tasks, add a task"
-             value={task}
-             onKeyDown={(e)=>setTask(e.target.value)}
-             >
-             {listItems}
+          <ul>
+          {list.map((task,index)=>{
+            return(
+              <li
+                  key={index}>
+                {task.label}
+                <button className="delete-button"
+                        onClick={()=>handleDeleteTask(index)}>
+                  x
+                </button>
+              </li>
+            )
+          })}
+            
+         
+            <p>{list.length} items left</p>
+        
              </ul>
-            </form>
+            
 
 
     </div>
